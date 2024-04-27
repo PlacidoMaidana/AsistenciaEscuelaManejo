@@ -64,10 +64,31 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+
+        // Crear el usuario
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+
+        // Obtener la imagen del formulario de registro
+        $photo = request()->file('photo');
+
+        // Log para verificar si la foto se obtiene correctamente
+        // Log para verificar si la foto se obtiene correctamente
+        logger()->info('Foto recibida:', ['photo' => $photo]);
+        // Guardar la imagen en la ubicación adecuada con el nombre de archivo correcto
+        if ($photo) {
+            $userId = $user->id; // Obtener el ID del usuario
+            $photo->storeAs('facces', $userId . '.png');
+            // Log para verificar la ruta donde se guarda la foto
+            logger()->info('Foto guardada en:', ['path' => storage_path('facces') . $userId . '.png']);
+        }
+
+
+        // Retornar el usuario creado
+        return $user;
     }
 }
