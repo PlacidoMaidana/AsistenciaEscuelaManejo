@@ -82,18 +82,20 @@
                                     <button type="button" id="captureButton" class="btn btn-primary">
                                         {{ __('Capture Image') }}
                                     </button>
-
+                                    <!-- Agregar un campo oculto para enviar los datos base64 de la imagen -->
+                                    <input type="hidden" id="capturedImageDataInput" name="capturedImageDataInput">
                                     <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
                                 </div>
                             </div>
 
-
+                            <!-- Agregar un botón para enviar el formulario -->
+                            <button type="submit" class="btn btn-primary" id="submitButton" >Enviar</button>
 
                         </form>
 
 
                         <!-- Elemento img para mostrar la imagen capturada -->
-                        <img id="capturedImage" src="" alt="Captured Image">
+                        <img id="capturedImage" src="" alt="Captured Image" >
                     </div>
                 </div>
             </div>
@@ -110,48 +112,57 @@
 
 @section('javascript')
 
-<script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const captureButton = document.getElementById('captureButton');
-        const photo = document.getElementById('capturedImage');
-        let width = 640; // Update with your desired width
-        let height = 480; // Update with your desired height
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const captureButton = document.getElementById('captureButton');
+            const photo = document.getElementById('capturedImage');
+            let width = 640; // Update with your desired width
+            let height = 480; // Update with your desired height
 
-        async function initCamera() {
-            console.log("Inicializando la cámara...");
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: true
-                });
-                video.srcObject = stream;
-                console.log("La cámara se ha inicializado correctamente.");
-            } catch (err) {
-                console.error('Error al acceder a la cámara:', err);
+            async function initCamera() {
+                console.log("Inicializando la cámara...");
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        video: true
+                    });
+                    video.srcObject = stream;
+                    console.log("La cámara se ha inicializado correctamente.");
+                } catch (err) {
+                    console.error('Error al acceder a la cámara:', err);
+                }
             }
-        }
-        await initCamera();
+            await initCamera();
 
-        captureButton.addEventListener('click', () => {
-            takepicture();
+            captureButton.addEventListener('click', () => {
+                takepicture();
+            });
+
+            function takepicture() {
+                const context = canvas.getContext("2d");
+                if (width && height) {
+                    canvas.width = width;
+                    canvas.height = height;
+                    context.drawImage(video, 0, 0, width, height);
+
+                    const data = canvas.toDataURL("image/png");
+                    console.log(data);
+                    photo.setAttribute("src", data);
+
+                    // Envía los datos base64 al campo oculto en el formulario
+                    capturedImageDataInput.value = data;
+
+                    capturedImage.style.display = 'block';
+                    // Muestra el botón para enviar el formulario
+                    submitButton.style.display = 'block';
+
+                } else {
+                    console.error('Ancho o alto no definido.');
+                }
+            }
         });
-
-        function takepicture() {
-            const context = canvas.getContext("2d");
-            if (width && height) {
-                canvas.width = width;
-                canvas.height = height;
-                context.drawImage(video, 0, 0, width, height);
-
-                const data = canvas.toDataURL("image/png");
-                photo.setAttribute("src", data);
-            } else {
-                console.error('Ancho o alto no definido.');
-            }
-        }
-    });
-</script>
+    </script>
 
 
 @stop
