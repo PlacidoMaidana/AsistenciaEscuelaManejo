@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,3 +25,17 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::get('/view-face-image/{userId}', function ($userId) {
+    $imagePath = storage_path('facces') . '/' . $userId . '.png';
+
+    // Verifica si el archivo existe
+    if (File::exists($imagePath)) {
+        // Devuelve la imagen al navegador
+        return response()->file($imagePath);
+    } else {
+        // Si el archivo no existe, devuelve una respuesta 404
+        abort(404);
+    }
+})->name('view.face.image');

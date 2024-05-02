@@ -90,7 +90,7 @@ class RegisterController extends Controller
             $imageData = base64_decode($imageData);
             file_put_contents(storage_path('facces') . '/' . $userId . '.png', $imageData);
              // Log para verificar la ruta donde se guarda la foto
-             logger()->info('Foto guardada en:', ['path' => storage_path('facces') . $userId . '.png']);
+             logger()->info('Foto guardada en:', ['path' => storage_path('facces') . '/' . $userId . '.png']);
         }
 
         // Retornar el usuario creado

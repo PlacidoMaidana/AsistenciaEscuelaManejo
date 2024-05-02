@@ -39,6 +39,8 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+            //'provider' => 'faceauth',
+            
         ],
     ],
 

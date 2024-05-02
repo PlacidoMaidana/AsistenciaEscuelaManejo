@@ -100,7 +100,7 @@
             const video = document.getElementById('video');
             const canvas = document.getElementById('canvas');
             const captureButton = document.getElementById('captureButton');
-            const photo = document.getElementById('capturedImage');
+            const photoCapturada = document.getElementById('capturedImage');
             let width = 640; // Update with your desired width
             let height = 480; // Update with your desired height
 
@@ -131,12 +131,12 @@
 
                     const data = canvas.toDataURL("image/png");
                     console.log(data);
-                    photo.setAttribute("src", data);
+                    photoCapturada.setAttribute("src", data);
 
                     // Envía los datos base64 al campo oculto en el formulario,
                     // Your login form now needs a `photo` field (the name can be configured) - this field should contain a base64 representation of the image, the user uses to log in.
                     // laravel-face-auth/README.md at master · mpociot/laravel-face-auth https://github.com/mpociot/laravel-face-auth/blob/master/README.md?plain=1
-                    photo.value = data;
+                    photo.value =data;
 
                     capturedImage.style.display = 'block';
                     // Muestra el botón para enviar el formulario

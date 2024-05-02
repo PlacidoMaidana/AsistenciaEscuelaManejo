@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -47,6 +48,6 @@ class User extends Authenticatable implements FaceAuthenticatable
 
     public function getFaceAuthPhoto()
     {
-        return File::get(storage_path('facces') . $this->id . '.png');
+        return File::get(storage_path('facces'). '/'  . $this->id . '.png');
     }
 }
